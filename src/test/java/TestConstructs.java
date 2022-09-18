@@ -19,9 +19,10 @@ public class TestConstructs {
   public void setUpWebDriverAndRestAssured() {
 //        чтобы запустить в Яндексе надо расскоментировать строку ниже
 //        System.setProperty("webdriver.chrome.driver", "D://Yandex//bin//yandexdriver.exe");
-    Configuration.startMaximized = true;
+
     RestAssured.baseURI = UserAccount.BASEURI;
     mainPage = open(MainPage.MAINPAGE_URL, MainPage.class);
+
   }
 
   @After
@@ -31,8 +32,9 @@ public class TestConstructs {
 
   @DisplayName("Проверка успешного перехода на раздел Булки")
   @Test
-  public void testSuccessMoveToBunSection() {
+  public void testSuccessMoveToBunSection() throws InterruptedException {
     mainPage.clickSectionSauceInConstructor();
+
     mainPage.clickSectionBunInConstructor();
     boolean checkIsDisplayed = mainPage.checkHeaderBunSectionInConstructor();
     Assert.assertEquals(true, checkIsDisplayed);
@@ -40,7 +42,7 @@ public class TestConstructs {
 
   @DisplayName("Проверка успешного перехода на раздел Соусы")
   @Test
-  public void testSuccessMoveToSauceSection() {
+  public void testSuccessMoveToSauceSection() throws InterruptedException {
     mainPage.clickSectionFillingInConstructor();
     mainPage.clickSectionSauceInConstructor();
     boolean checkIsDisplayed = mainPage.checkHeaderSauceSectionInConstructor();
@@ -49,7 +51,7 @@ public class TestConstructs {
 
   @DisplayName("Проверка успешного перехода на раздел Начинки")
   @Test
-  public void testSuccessMoveToFillingSection() {
+  public void testSuccessMoveToFillingSection() throws InterruptedException {
     mainPage.clickSectionFillingInConstructor();
     boolean checkIsDisplayed = mainPage.checkHeaderFillingSectionInConstructor();
     Assert.assertEquals(true, checkIsDisplayed);

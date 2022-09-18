@@ -1,9 +1,21 @@
 package site.stellarburgers;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.commands.Click;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class MainPage {
   public final static String MAINPAGE_URL = "https://stellarburgers.nomoreparties.site/";
@@ -29,15 +41,11 @@ public class MainPage {
   //локатор раздела Начинки в конструкторе
   @FindBy(how = How.XPATH, using = ".//span[text()='Начинки']")
   private SelenideElement sectionFillingInConstructor;
-  //локатор надписи раздела начинка в списке ингридиентов
-  @FindBy(how = How.XPATH, using = ".//h2[text()='Начинки']")
-  private SelenideElement headerFillingSectionInConstructor;
-  //локатор локатор надписи булки в списке ингридиентов
-  @FindBy(how = How.XPATH, using = ".//h2[text()='Булки']")
-  private SelenideElement headerBunSectionInConstructor;
-  //локатор окатор надписи соусы в списке ингридиентов
-  @FindBy(how = How.XPATH, using = ".//h2[text()='Соусы']")
-  private SelenideElement headerSauceSectionInConstructor;
+  //Локатор выбранного раздела
+  @FindBy(how = How.CLASS_NAME, using = "tab_tab_type_current__2BEPc")
+  private SelenideElement selectedSectionInConstructor;
+
+
 
   @Step("Клик на кнопку Войти")
   public void clickButtonSighIn() {
@@ -60,32 +68,45 @@ public class MainPage {
   }
 
   @Step("Клик на секцию Булки в Конструкторе")
-  public void clickSectionBunInConstructor() {
-    sectionBunInConstructor.doubleClick();
+  public void clickSectionBunInConstructor(){
+    ;
+    WebDriverWait wait = new WebDriverWait(WebDriverRunner.getWebDriver(), 5);
+    wait.until(ExpectedConditions.elementToBeClickable(sectionBunInConstructor));
+    sectionBunInConstructor.click();
   }
 
   @Step("Клик на секцию Соусы в Конструкторе")
   public void clickSectionSauceInConstructor() {
+
+    WebDriverWait wait = new WebDriverWait(WebDriverRunner.getWebDriver(), 5);
+    wait.until(ExpectedConditions.elementToBeClickable(sectionSauceInConstructor));
     sectionSauceInConstructor.click();
   }
 
   @Step("Клик на секцию Начинки в Конструкторе")
   public void clickSectionFillingInConstructor() {
+    WebDriverWait wait = new WebDriverWait(WebDriverRunner.getWebDriver(), 5);
+    wait.until(ExpectedConditions.elementToBeClickable(sectionFillingInConstructor));
     sectionFillingInConstructor.click();
   }
 
   @Step("Проверка отображения хедера Начинки в списке ингридиентов")
   public boolean checkHeaderFillingSectionInConstructor() {
-    return headerFillingSectionInConstructor.isDisplayed();
+    return checkSelected("Начинки");
   }
 
   @Step("Проверка отображения хедера Булки в списке ингридиентов")
-  public boolean checkHeaderBunSectionInConstructor() {
-    return headerBunSectionInConstructor.isDisplayed();
+  public boolean checkHeaderBunSectionInConstructor(){
+    return checkSelected("Булки");
   }
 
   @Step("Проверка отображения хедера Соусы в списке ингридиентов")
-  public boolean checkHeaderSauceSectionInConstructor() {
-    return headerSauceSectionInConstructor.isDisplayed();
+  public boolean checkHeaderSauceSectionInConstructor(){
+    return checkSelected("Соусы");
+  }
+
+  private boolean checkSelected(String title) {
+    selectedSectionInConstructor.shouldBe(Condition.exactText(title),Duration.ofSeconds(10));
+    return selectedSectionInConstructor.getText().equals(title);
   }
 }
